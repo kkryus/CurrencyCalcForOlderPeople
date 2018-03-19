@@ -6,33 +6,30 @@ public class FavoriteRowItem {
     private String fullCurrency;
     private String value;
 
-    public FavoriteRowItem()
-    {
+    public FavoriteRowItem() {
 
     }
 
-    public FavoriteRowItem(int imageDrawable, String shortcut, String fullCurrency, String value)
-    {
+    public FavoriteRowItem(int imageDrawable, String shortcut, String fullCurrency, String value) {
         this.imageDrawable = imageDrawable;
         this.shortcut = shortcut;
         this.fullCurrency = fullCurrency;
         this.value = value;
     }
 
-    public int getImageDrawable()
-    {
+    public int getImageDrawable() {
         return imageDrawable;
     }
-    public String getShortcut()
-    {
+
+    public String getShortcut() {
         return shortcut;
     }
-    public String getFullCurrency()
-    {
+
+    public String getFullCurrency() {
         return fullCurrency;
     }
-    public String getValue()
-    {
+
+    public String getValue() {
         return value;
     }
 }

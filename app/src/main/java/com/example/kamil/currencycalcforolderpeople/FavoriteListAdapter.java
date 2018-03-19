@@ -1,12 +1,15 @@
 package com.example.kamil.currencycalcforolderpeople;
 
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kamil.currencycalcforolderpeople.R;
 
@@ -15,12 +18,14 @@ import java.util.List;
 
 class FavoriteListAdapter extends BaseAdapter {
 
+    Context ctx;
     private ArrayList<FavoriteRowItem> data;
     private static LayoutInflater inflater = null;
-    ImageButton imageButton;
-    TextView shortcutTextView, fullCurrencyTextView, currencyValueTextVIew;
+    private ImageView imageView;
+    private TextView shortcutTextView, fullCurrencyTextView, currencyValueTextVIew;
 
     public FavoriteListAdapter(Context context, ArrayList<FavoriteRowItem> data) {
+        ctx = context;
         this.data = data;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -43,26 +48,35 @@ class FavoriteListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
         View vi = convertView;
         if (vi == null) {
             vi = inflater.inflate(R.layout.favorite_row, null);
         }
 
-        imageButton = (ImageButton) vi.findViewById(R.id.flagButton);
+        imageView = (ImageView) vi.findViewById(R.id.imageView);
         shortcutTextView = (TextView) vi.findViewById(R.id.shortcutView);
         fullCurrencyTextView = (TextView) vi.findViewById(R.id.fullCurrencyView);
         currencyValueTextVIew = (TextView) vi.findViewById(R.id.currencyValueView);
-
+        setHeights();
         setListRow(position);
 
         return vi;
     }
 
     private void setListRow(int position) {
-        imageButton.setImageResource(data.get(position).getImageDrawable());//*/
+        imageView.setImageResource(data.get(position).getImageDrawable());
         shortcutTextView.setText(data.get(position).getShortcut());
         fullCurrencyTextView.setText(data.get(position).getFullCurrency());
         currencyValueTextVIew.setText(data.get(position).getValue());
+    }
+
+    public void setHeights() {
+        imageView.getLayoutParams().height = Defaults.imageButtonHeight;
+        imageView.requestLayout();
+        int sp = (int) (Defaults.textViewTextSize / ctx.getResources().getDisplayMetrics().scaledDensity);
+        int sp2 = (int) (Defaults.shortcutViewTextSize / ctx.getResources().getDisplayMetrics().scaledDensity);
+        shortcutTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp2);
+        fullCurrencyTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
+        currencyValueTextVIew.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
     }
 }
