@@ -4,35 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:weightSum="3.5">
 
-    <ImageButton
-        android:id="@+id/flagButton"
-
-        android:layout_weight="1"
-        android:layout_width="20dp"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="40dp"
         android:layout_height="70dp"
+        android:layout_weight=".3"
+
+
         app:srcCompat="@drawable/poland_flag" />
 
     <TextView
         android:id="@+id/shortcutView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight=".5"
         android:text="TextView" />
 
     <TextView
         android:id="@+id/fullCurrencyView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="1.3"
         android:text="TextView" />
 
     <TextView
         android:id="@+id/currencyValueView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="1.4"
         android:text="TextView" />
 
 
