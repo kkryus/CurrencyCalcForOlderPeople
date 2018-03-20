@@ -3,4 +3,8 @@
     <string name="updateButtonText">Update</string>
     <string name="settingsButtonText">Settings</string>
     <string name="customButtonText">Custom</string>
+    <string name="urlLink">http://api.nbp.pl/api/exchangerates/tables/A?format=json</string>
+    <string name="currenciesFileName">currencies</string>
+    <string name="connectionTitle">Connection failure</string>
+    <string name="connectionMessage">You do not have connection with the internet. Please check your internet connection and try again.</string>
 </resources>
