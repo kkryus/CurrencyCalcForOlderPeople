@@ -7,4 +7,9 @@
     <string name="currenciesFileName">currencies</string>
     <string name="connectionTitle">Connection failure</string>
     <string name="connectionMessage">You do not have connection with the internet. Please check your internet connection and try again.</string>
+    <string name="numberPrecision">Number precision</string>
+    <string name="fontSize">Font size</string>
+    <string name="language">Language</string>
+    <string name="informations">Informations</string>
+    <string name="headerTitle">Options</string>
 </resources>
