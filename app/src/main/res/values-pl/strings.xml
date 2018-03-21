@@ -12,4 +12,6 @@
     <string name="language">Język</string>
     <string name="informations">Informacje</string>
     <string name="headerTitle">Ustawienia</string>
+    <string name="wifi">Aktualizuj tylko przez wifi</string>
+    <string name="chooseNumberPrecision">Wybierz dokładność obliczeń</string>
 </resources>

@@ -12,4 +12,6 @@
     <string name="language">Language</string>
     <string name="informations">Informations</string>
     <string name="headerTitle">Options</string>
+    <string name="chooseNumberPrecision">Choose number precision</string>
+    <string name="wifi">Update only through wifi</string>
 </resources>

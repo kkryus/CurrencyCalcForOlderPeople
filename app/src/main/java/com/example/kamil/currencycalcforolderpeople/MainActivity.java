@@ -4,34 +4,25 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
-import android.text.style.TextAppearanceSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -43,6 +34,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ListView favoriteListView;
@@ -60,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         ctx = this;
         loadControls();
+
 
         ArrayList<FavoriteRowItem> tmp = new ArrayList<>();
         tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
@@ -84,23 +77,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.bringToFront();
 
         setSettingsHeights();
-        setHeights();
     }
 
-    public void setHeights() {
-        firstShortcutButton.setTextSize(Defaults.buttonTextSize);
-        secondShortcutButton.setTextSize(Defaults.buttonTextSize);
-
-        inputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-        outputEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
-
-        settingsButton.setTextSize(Defaults.buttonTextSize);
-        updateButton.setTextSize(Defaults.buttonTextSize);
-        customButton.setTextSize(Defaults.buttonTextSize);
-
-    }
-
-    private void setAlertHeights(AlertDialog alert) {
+    private void setConnectionAlertHeights(AlertDialog alert) {
         alert.getWindow().getAttributes();
 
         TextView textView = (TextView) alert.findViewById(android.R.id.message);
@@ -116,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textView.setTextSize(Defaults.textViewTextSize);
 
         Menu menu = (Menu) navigationView.getMenu();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             MenuItem item = menu.getItem(i); //here we are getting our menu item.
             SpannableString s = new SpannableString(item.getTitle()); //get text from our menu item.
             s.setSpan(new RelativeSizeSpan((float) Defaults.settingsItemMenu), 0, s.length(), 0); //here is where we are actually setting the size with a float (proportion).
@@ -212,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     View.OnClickListener settingsButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -258,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 AlertDialog alert = builder.create();
                 alert.show();
-                setAlertHeights(alert);
+                setConnectionAlertHeights(alert);
 
                 didConnect = true;
             }
@@ -293,21 +271,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
 
             case R.id.number_precision: {
-                //do somthing
+                CharSequence numberPrecisions[] = new CharSequence[]{"0.1", "0.12", "0.123", "0.1234"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getResources().getString(R.string.numberPrecision));
+                builder.setItems(numberPrecisions, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Settings.numberPrecision = which + 1;
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
                 break;
             }
-            case R.id.font_size: {
-                //do smth
-                break;
-            }
+
             case R.id.language: {
                 //do smth
                 break;
             }
+
             case R.id.informations: {
                 //do smth
                 break;
             }
+
         }
         //navBar.closeDrawer(GravityCompat.START);
         return true;
