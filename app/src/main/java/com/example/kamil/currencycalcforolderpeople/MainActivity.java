@@ -31,6 +31,7 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -184,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void readFromFile() {
         try {
             FileInputStream fis = ctx.openFileInput(getString(R.string.currenciesFileName));
+            ;
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();
@@ -210,13 +212,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void run() {
                     try {
-                        if (isNetworkAvailable()) {
-                            String buffer = getJSONCurrencies();
+                        if (Settings.internetConnection == "all") {
+                            if (isNetworkAvailable()) {
+                                String buffer = getJSONCurrencies();
 
-                            saveToFile(buffer);
-                            didConnect = true;
+                                saveToFile(buffer);
+                                didConnect = true;
+                            } else {
+                                didConnect = false;
+                            }
                         } else {
-                            didConnect = false;
+                            ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                            NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                            if (mWifi.isConnected()) {
+                                String buffer = getJSONCurrencies();
+
+                                saveToFile(buffer);
+                                didConnect = true;
+                            } else {
+                                didConnect = false;
+                            }
                         }
                     } catch (Exception e) {
 
@@ -252,8 +268,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     View.OnClickListener customButtomOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
         }
+
     };
 
     @Override
@@ -318,6 +334,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             case R.id.connection: {
+                CharSequence numberPrecisions[] = new CharSequence[]{getString(R.string.justWifi), getString(R.string.all)};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.connection));
+                builder.setItems(numberPrecisions, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            Settings.internetConnection = "wifi";
+                        } else {
+                            Settings.internetConnection = "all";
+                        }
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
 
                 break;
             }
