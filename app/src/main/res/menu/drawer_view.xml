@@ -1,17 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <group android:id="@+id/grp1" android:checkableBehavior="single">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/grp1"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/number_precision"
             android:title="@string/numberPrecision" />
     </group>
-    <group android:id="@+id/grp3" android:checkableBehavior="single">
+    <group
+        android:id="@+id/grp2"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/language"
             android:title="@string/language" />
     </group>
 
-    <group android:id="@+id/grp4" android:checkableBehavior="single">
+    <group
+        android:id="@+id/grp3"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/connection"
+            android:title="@string/connection" />
+    </group>
+
+    <group
+        android:id="@+id/grp4"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/informations"
             android:title="@string/informations" />

@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -13,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -34,6 +38,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -95,7 +100,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textView.setTextSize(Defaults.textViewTextSize);
 
         Menu menu = (Menu) navigationView.getMenu();
-        for (int i = 0; i < 3; i++) {
+
+        for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.getItem(i); //here we are getting our menu item.
             SpannableString s = new SpannableString(item.getTitle()); //get text from our menu item.
             s.setSpan(new RelativeSizeSpan((float) Defaults.settingsItemMenu), 0, s.length(), 0); //here is where we are actually setting the size with a float (proportion).
@@ -287,7 +293,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             case R.id.language: {
-                //do smth
+                CharSequence numberPrecisions[] = new CharSequence[]{"English", "Polski"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(getResources().getString(R.string.chooseLanguage));
+                builder.setItems(numberPrecisions, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            Settings.language = "en";
+                        } else {
+                            Settings.language = "pl";
+                        }
+                        String languageToLoad = Settings.language; // your language
+                        Locale locale = new Locale(languageToLoad);
+                        Locale.setDefault(locale);
+                        Configuration config = new Configuration();
+                        config.locale = locale;
+                        getBaseContext().getResources().updateConfiguration(config,
+                                getBaseContext().getResources().getDisplayMetrics());
+                        ctx.getResources().updateConfiguration(config, ctx.getResources().getDisplayMetrics());
+                        Intent myIntent = new Intent(ctx, MainActivity.class);
+                        startActivity(myIntent);
+                        finish();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+                break;
+            }
+
+            case R.id.connection: {
+
                 break;
             }
 
