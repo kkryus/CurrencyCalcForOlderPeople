@@ -305,14 +305,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         } else {
                             Settings.language = "pl";
                         }
-                        String languageToLoad = Settings.language; // your language
-                        Locale locale = new Locale(languageToLoad);
-                        Locale.setDefault(locale);
-                        Configuration config = new Configuration();
-                        config.locale = locale;
-                        getBaseContext().getResources().updateConfiguration(config,
-                                getBaseContext().getResources().getDisplayMetrics());
-                        ctx.getResources().updateConfiguration(config, ctx.getResources().getDisplayMetrics());
+
+                        changeLanguage();
                         Intent myIntent = new Intent(ctx, MainActivity.class);
                         startActivity(myIntent);
                         finish();
@@ -329,12 +323,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             case R.id.informations: {
-                //do smth
+                AlertDialog.Builder builder;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(ctx, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(ctx);
+                }
+                setInformationSettings(builder);
+
+                AlertDialog alert = builder.create();
+                alert.show();
+                setConnectionAlertHeights(alert);
+
                 break;
             }
 
         }
         //navBar.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setInformationSettings(AlertDialog.Builder builder) {
+        builder.setTitle(getString(R.string.information));
+        builder.setMessage(getString(R.string.information_message));
+        builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+
+        builder.setIcon(android.R.drawable.ic_dialog_info);
+    }
+
+    private void changeLanguage() {
+        String languageToLoad = Settings.language; // your language
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+        ctx.getResources().updateConfiguration(config, ctx.getResources().getDisplayMetrics());
     }
 }
