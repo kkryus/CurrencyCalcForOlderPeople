@@ -17,4 +17,6 @@
     <string name="connection">Internet</string>
     <string name="information">Information</string>
     <string name="information_message">This application was made by Kamil Kryus due to project in Silesian University of Technology in Gliwice. </string>
+    <string name="justWifi">Just wifi</string>
+    <string name="all">Wifi and mobile data</string>
 </resources>
