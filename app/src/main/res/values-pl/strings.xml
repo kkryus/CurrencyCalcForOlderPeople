@@ -12,7 +12,9 @@
     <string name="language">Język</string>
     <string name="informations">Informacje</string>
     <string name="headerTitle">Ustawienia</string>
-    <string name="connection">Internets</string>
+    <string name="connection">Internet</string>
     <string name="chooseNumberPrecision">Wybierz dokładność obliczeń</string>
     <string name="chooseLanguage">Wybierz język</string>
+    <string name="information">Informacja</string>
+    <string name="information_message">Ta aplikacja została stworzona przez Kamila Kryusa na zajęcia na Politechnice Śląskiej w Gliwicach.</string>
 </resources>
