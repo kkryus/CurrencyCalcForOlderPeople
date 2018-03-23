@@ -1,12 +1,13 @@
 package com.example.kamil.currencycalcforolderpeople;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -14,24 +15,32 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.RelativeSizeSpan;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -39,16 +48,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ListView favoriteListView;
     private Button firstShortcutButton, secondShortcutButton;
     private EditText inputEditText, outputEditText;
     private Button settingsButton, updateButton, customButton;
+    private ImageButton firstFlagButton, secondFlagButton;
+    private ImageButton replaceButton, clearButton;
     private Context ctx;
-    private boolean didConnect = true;
+    private boolean didConnect = true, firstTimeInput = true;
     private DrawerLayout navBar;
     private NavigationView navigationView;
 
@@ -61,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         ArrayList<FavoriteRowItem> tmp = new ArrayList<>();
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
+        tmp.add(new FavoriteRowItem(R.drawable.flag_euro, "PLN", "polski złoty", "1"));
         tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "5000.3746"));
         tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "0.3746"));
         tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
@@ -79,10 +90,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         favoriteListView.setAdapter(new FavoriteListAdapter(this, tmp));
 
-        setOnClickListeners();
+        setListeners();
         navigationView.bringToFront();
 
         setSettingsHeights();
+    }
+
+    private void loadControls() {
+        navBar = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        favoriteListView = (ListView) findViewById(R.id.favoriteListView);
+
+        firstShortcutButton = (Button) findViewById(R.id.firstShortcutButton);
+        secondShortcutButton = (Button) findViewById(R.id.secondShortcutButton);
+
+        firstFlagButton = (ImageButton) findViewById(R.id.firstFlagButton);
+        secondFlagButton = (ImageButton) findViewById(R.id.secondFlagButton);
+
+        replaceButton = (ImageButton) findViewById(R.id.replaceButton);
+        clearButton = (ImageButton) findViewById(R.id.cleanButton);
+
+        inputEditText = (EditText) findViewById(R.id.inputEditText);
+        outputEditText = (EditText) findViewById(R.id.outputEditText);
+
+        settingsButton = (Button) findViewById(R.id.settingsButton);
+        updateButton = (Button) findViewById(R.id.updateButton);
+        customButton = (Button) findViewById(R.id.customButton);
+
+    }
+
+    private void setListeners() {
+        replaceButton.setOnClickListener(replaceButtonOnClickListener);
+        inputEditText.addTextChangedListener(inputTextWatcher);
+        inputEditText.setOnTouchListener(inputOnTouchListener);
+        clearButton.setOnTouchListener(clearButtonOnTouchListener);
+
+
+        settingsButton.setOnClickListener(settingsButtonOnClickListener);
+        updateButton.setOnClickListener(updateButtonOnClickListener);
+        customButton.setOnClickListener(customButtomOnClickListener);
+
+        navigationView.setNavigationItemSelectedListener(this);
+        favoriteListView.setOnItemClickListener(favoriteOnItemClickListener);
     }
 
     private void setConnectionAlertHeights(AlertDialog alert) {
@@ -110,28 +159,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void setOnClickListeners() {
-        settingsButton.setOnClickListener(settingsButtonOnClickListener);
-        updateButton.setOnClickListener(updateButtonOnClickListener);
-        customButton.setOnClickListener(customButtomOnClickListener);
+    private void setAlertSettings(AlertDialog.Builder builder) {
+        builder.setTitle(getString(R.string.connectionTitle));
+        builder.setMessage(getString(R.string.connectionMessage));
+        builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
 
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    private void loadControls() {
-        navBar = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        favoriteListView = (ListView) findViewById(R.id.favoriteListView);
-
-        firstShortcutButton = (Button) findViewById(R.id.firstShortcutButton);
-        secondShortcutButton = (Button) findViewById(R.id.secondShortcutButton);
-
-        inputEditText = (EditText) findViewById(R.id.inputEditText);
-        outputEditText = (EditText) findViewById(R.id.outputEditText);
-
-        settingsButton = (Button) findViewById(R.id.settingsButton);
-        updateButton = (Button) findViewById(R.id.updateButton);
-        customButton = (Button) findViewById(R.id.customButton);
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
     }
 
     private String getJSONCurrencies() {
@@ -170,19 +207,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void setAlertSettings(AlertDialog.Builder builder) {
-        builder.setTitle(getString(R.string.connectionTitle));
-        builder.setMessage(getString(R.string.connectionMessage));
-        builder.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
-
-        builder.setIcon(android.R.drawable.ic_dialog_alert);
-    }
-
-    private void readFromFile() {
+    private String readFromFile() {
         try {
             FileInputStream fis = ctx.openFileInput(getString(R.string.currenciesFileName));
             ;
@@ -193,16 +218,108 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line);
             }
-            Log.e("Response: ", sb.toString());
+            return sb.toString();
         } catch (Exception e) {
             Log.e("foo", e.getMessage());
         }
+        return null;
     }
+
+    View.OnClickListener replaceButtonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String tmpShortcut = firstShortcutButton.getText().toString();
+            firstShortcutButton.setText(secondShortcutButton.getText());
+            secondShortcutButton.setText(tmpShortcut);
+
+            Drawable tmpFlag = firstFlagButton.getDrawable();
+            firstFlagButton.setImageDrawable(secondFlagButton.getDrawable());
+            secondFlagButton.setImageDrawable(tmpFlag);
+        }
+    };
+
+
+    View.OnTouchListener inputOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            inputEditText.setText("");
+            return false;
+        }
+    };
+
+    View.OnTouchListener clearButtonOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            inputEditText.setText("1");
+            return false;
+        }
+    };
+
+    TextWatcher inputTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            String json = readFromFile();
+
+            try {
+                JSONArray arr = new JSONArray(json);
+                JSONObject jsonobject = arr.getJSONObject(0);
+                JSONArray foo = jsonobject.getJSONArray("rates");
+                if (!firstShortcutButton.getText().toString().equals("PLN") && !inputEditText.getText().toString().equals("")) {
+                    double value = 0;
+                    for (int i = 0; i < foo.length(); i++) {
+                        JSONObject tmp = foo.getJSONObject(i);
+                        if (tmp.getString("code").equals(firstShortcutButton.getText().toString())) {
+                            double id = tmp.getDouble("mid");
+                            value = Double.parseDouble(inputEditText.getText().toString()) * id;
+
+                            //outputEditText.setText(String.format("%." + Settings.numberPrecision +"f",value));
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < foo.length(); i++) {
+                        JSONObject tmp = foo.getJSONObject(i);
+                        if (tmp.getString("code").equals(secondShortcutButton.getText().toString())) {
+                            double id = tmp.getDouble("mid");
+                            value = value / id;
+                            outputEditText.setText(String.format("%." + Settings.numberPrecision + "f", value));
+                            break;
+                        }
+                    }
+
+                }
+                if (firstShortcutButton.getText().toString().equals("PLN") && !inputEditText.getText().toString().equals("")) {
+                    for (int i = 0; i < foo.length(); i++) {
+                        JSONObject tmp = foo.getJSONObject(i);
+                        if (tmp.getString("code").equals(secondShortcutButton.getText().toString())) {
+                            double id = tmp.getDouble("mid");
+                            double value = Double.parseDouble(inputEditText.getText().toString()) / id;
+                            outputEditText.setText(String.format("%." + Settings.numberPrecision + "f", value));
+                            break;
+                        }
+                    }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    };
 
     View.OnClickListener settingsButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             navBar.openDrawer(Gravity.LEFT);
+            InputMethodManager inputMethodManager = (InputMethodManager) ctx.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0);
         }
     };
 
@@ -272,21 +389,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     };
 
-    @Override
-    public void onBackPressed() {
-        if (navBar.isDrawerOpen(Gravity.LEFT)) {
-            navBar.closeDrawer(Gravity.LEFT);
-        } else {
-            super.onBackPressed();
+    AdapterView.OnItemClickListener favoriteOnItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            ImageView flag = (ImageView) view.findViewById(R.id.imageView);
+            TextView shortcut = (TextView) view.findViewById(R.id.shortcutView);
+            firstFlagButton.setImageDrawable(flag.getDrawable());
+            firstShortcutButton.setText(shortcut.getText());
         }
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
+    };
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -376,6 +487,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (navBar.isDrawerOpen(Gravity.LEFT)) {
+            navBar.closeDrawer(Gravity.LEFT);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
     private void setInformationSettings(AlertDialog.Builder builder) {
         builder.setTitle(getString(R.string.information));
         builder.setMessage(getString(R.string.information_message));
@@ -398,4 +525,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getBaseContext().getResources().getDisplayMetrics());
         ctx.getResources().updateConfiguration(config, ctx.getResources().getDisplayMetrics());
     }
+
+
 }

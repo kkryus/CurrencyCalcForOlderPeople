@@ -84,7 +84,7 @@
                     android:layout_toEndOf="@+id/firstFlagButton"
                     android:textSize="20sp"
                     android:background="@android:color/transparent"
-                    android:text="PLN" />
+                    android:text="USD" />
 
                 <Button
                     android:id="@+id/secondShortcutButton"
@@ -95,7 +95,7 @@
                     android:layout_toStartOf="@+id/secondFlagButton"
                     android:textSize="20sp"
                     android:background="@android:color/transparent"
-                    android:text="PLN" />
+                    android:text="EUR" />
 
                 <ImageButton
                     android:id="@+id/secondFlagButton"
@@ -104,7 +104,7 @@
                     android:layout_alignEnd="@+id/calculatorWrappingBorder"
                     android:layout_alignTop="@+id/firstFlagButton"
                     android:layout_marginEnd="14dp"
-                    app:srcCompat="@drawable/poland_flag" />
+                    app:srcCompat="@drawable/flag_euro" />
 
                 <ImageButton
                     android:id="@+id/replaceButton"
@@ -141,6 +141,8 @@
                     android:layout_marginStart="21dp"
                     android:background="#c7c8c9"
                     android:cursorVisible="false"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:ems="5"
                     android:imeOptions="actionDone"
                     android:textSize="22sp"
