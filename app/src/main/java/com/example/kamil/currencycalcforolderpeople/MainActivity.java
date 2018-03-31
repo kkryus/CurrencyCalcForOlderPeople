@@ -18,27 +18,30 @@ import android.os.Bundle;;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -48,7 +51,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button firstShortcutButton, secondShortcutButton;
     private EditText inputEditText, outputEditText;
     private Button settingsButton, updateButton, customButton;
-    private ImageButton firstFlagButton, secondFlagButton;
+    private ImageView firstFlagButton, secondFlagButton;
     private ImageButton replaceButton, clearButton;
     private Context ctx;
     private boolean didConnect = true, firstTimeInput = true;
@@ -92,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setListeners();
         navigationView.bringToFront();
-
         setSettingsHeights();
     }
 
@@ -104,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         firstShortcutButton = (Button) findViewById(R.id.firstShortcutButton);
         secondShortcutButton = (Button) findViewById(R.id.secondShortcutButton);
 
-        firstFlagButton = (ImageButton) findViewById(R.id.firstFlagButton);
-        secondFlagButton = (ImageButton) findViewById(R.id.secondFlagButton);
+        firstFlagButton = (ImageView) findViewById(R.id.firstFlagButton);
+        secondFlagButton = (ImageView) findViewById(R.id.secondFlagButton);
 
         replaceButton = (ImageButton) findViewById(R.id.replaceButton);
         clearButton = (ImageButton) findViewById(R.id.cleanButton);
@@ -116,11 +118,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         settingsButton = (Button) findViewById(R.id.settingsButton);
         updateButton = (Button) findViewById(R.id.updateButton);
         customButton = (Button) findViewById(R.id.customButton);
-
     }
 
     private void setListeners() {
+        firstFlagButton.setOnTouchListener(currencyOnTouchListener);
+        secondFlagButton.setOnTouchListener(currencyOnTouchListener);
+        firstShortcutButton.setOnTouchListener(currencyOnTouchListener);
+        secondShortcutButton.setOnTouchListener(currencyOnTouchListener);
         replaceButton.setOnClickListener(replaceButtonOnClickListener);
+
         inputEditText.addTextChangedListener(inputTextWatcher);
         inputEditText.setOnTouchListener(inputOnTouchListener);
         clearButton.setOnTouchListener(clearButtonOnTouchListener);
@@ -225,6 +231,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return null;
     }
 
+    View.OnTouchListener currencyOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+
+                // {
+                    Log.e("foo", "pierwsze");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(ctx);
+
+                    alert.setTitle("Loading");
+                    //LayoutInflater inflater = getLayoutInflater();
+                    //inflate view for alertdialog since we are using multiple views inside a viewgroup (root = Layout top-level) (linear, relative, framelayout etc..)
+                    //View myView = inflater.inflate(R.layout.my_alert_dialog, (ViewGroup) findViewById(R.id.linearView));
+
+                    ArrayList<CurrenciesRowItem> foobar = new ArrayList<CurrenciesRowItem>();
+                    foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "PLN", "polski złoty"));
+                    foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "PLN", "polski złoty"));
+                    foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "PLN", "polski złoty"));
+                    alert.setAdapter(new CurrenciesListAdapter(ctx, foobar), new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.e("oko", "oko");
+                        }
+                    });
+                    alert.create();
+                    alert.show();
+                //} //else
+                   // Log.e("foo", "drugie");
+                //your code
+            }
+            return false;
+        }
+    };
+
     View.OnClickListener replaceButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -235,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Drawable tmpFlag = firstFlagButton.getDrawable();
             firstFlagButton.setImageDrawable(secondFlagButton.getDrawable());
             secondFlagButton.setImageDrawable(tmpFlag);
+            inputEditText.setText(inputEditText.getText());
         }
     };
 
@@ -268,6 +310,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void afterTextChanged(Editable editable) {
             String json = readFromFile();
 
+            if (editable.toString().contains(".")) {
+                inputEditText.setKeyListener(DigitsKeyListener.getInstance("0123456789"));
+            } else {
+                inputEditText.setKeyListener(DigitsKeyListener.getInstance("0123456789."));
+            }
+
             try {
                 JSONArray arr = new JSONArray(json);
                 JSONObject jsonobject = arr.getJSONObject(0);
@@ -280,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             double id = tmp.getDouble("mid");
                             value = Double.parseDouble(inputEditText.getText().toString()) * id;
 
-                            //outputEditText.setText(String.format("%." + Settings.numberPrecision +"f",value));
+                            outputEditText.setText(String.format("%." + Settings.numberPrecision + "f", value));
                             break;
                         }
                     }
@@ -306,10 +354,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                     }
                 }
+                if (firstShortcutButton.getText().toString().equals(secondShortcutButton.getText().toString())) {
+                    outputEditText.setText(inputEditText.getText());
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
 
         }
     };
@@ -396,6 +448,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TextView shortcut = (TextView) view.findViewById(R.id.shortcutView);
             firstFlagButton.setImageDrawable(flag.getDrawable());
             firstShortcutButton.setText(shortcut.getText());
+            inputEditText.setText(inputEditText.getText());
         }
     };
 
@@ -414,6 +467,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Settings.numberPrecision = which + 1;
                     }
                 });
+
                 AlertDialog alert = builder.create();
                 alert.show();
                 break;
@@ -481,9 +535,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             }
-
         }
-        //navBar.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -525,6 +577,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getBaseContext().getResources().getDisplayMetrics());
         ctx.getResources().updateConfiguration(config, ctx.getResources().getDisplayMetrics());
     }
-
-
 }

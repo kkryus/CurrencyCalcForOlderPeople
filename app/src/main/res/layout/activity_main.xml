@@ -65,7 +65,7 @@
                     android:layout_centerVertical="true"
                     android:background="@drawable/calculator_wrapping_border" />
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/firstFlagButton"
                     android:layout_width="60dp"
                     android:layout_height="40dp"
@@ -97,7 +97,7 @@
                     android:background="@android:color/transparent"
                     android:text="EUR" />
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/secondFlagButton"
                     android:layout_width="60dp"
                     android:layout_height="40dp"
@@ -143,6 +143,7 @@
                     android:cursorVisible="false"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
+                    android:digits="0123456789.,"
                     android:ems="5"
                     android:imeOptions="actionDone"
                     android:textSize="22sp"
