@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean didConnect = true, firstTimeInput = true;
     private DrawerLayout navBar;
     private NavigationView navigationView;
+    private boolean which = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,36 +236,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
-                // {
-                    Log.e("foo", "pierwsze");
-                    AlertDialog.Builder alert = new AlertDialog.Builder(ctx);
-
-                    alert.setTitle("Loading");
-                    //LayoutInflater inflater = getLayoutInflater();
-                    //inflate view for alertdialog since we are using multiple views inside a viewgroup (root = Layout top-level) (linear, relative, framelayout etc..)
-                    //View myView = inflater.inflate(R.layout.my_alert_dialog, (ViewGroup) findViewById(R.id.linearView));
-
-                    ArrayList<CurrenciesRowItem> foobar = new ArrayList<CurrenciesRowItem>();
-                    foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "PLN", "polski złoty"));
-                    foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "PLN", "polski złoty"));
-                    foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "PLN", "polski złoty"));
-                    alert.setAdapter(new CurrenciesListAdapter(ctx, foobar), new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Log.e("oko", "oko");
-                        }
-                    });
-                    alert.create();
-                    alert.show();
-                //} //else
-                   // Log.e("foo", "drugie");
-                //your code
+                if (view.getId() == R.id.firstFlagButton || view.getId() == R.id.firstShortcutButton) {
+                    which = false;
+                } else {
+                    which = true;
+                }
+                Intent intent = new Intent(ctx, CurrenciesActivity.class);
+                startActivityForResult(intent, 0);
+                //startActivity(intent);
             }
             return false;
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            String shortcut = data.getStringExtra("shortcut");
+            if (!which) {
+                firstShortcutButton.setText(shortcut);
+                //firstFlagButton
+            } else {
+                secondShortcutButton.setText(shortcut);
+                //secondFlagButton
+            }
+        }
+    }
 
     View.OnClickListener replaceButtonOnClickListener = new View.OnClickListener() {
         @Override

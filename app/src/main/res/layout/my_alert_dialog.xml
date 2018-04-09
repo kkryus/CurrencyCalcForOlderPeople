@@ -5,8 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
     android:orientation="horizontal"
-    android:weightSum="3">
+    android:weightSum="2.7">
 
     <ImageView
         android:id="@+id/listImageFlag"
@@ -14,6 +16,8 @@
         android:layout_height="70dp"
         android:layout_weight=".7"
         android:gravity="center"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:srcCompat="@drawable/poland_flag" />
 
     <TextView
@@ -21,6 +25,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".5"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:gravity="center"
         android:text="PLN" />
 
@@ -29,15 +35,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1.5"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:gravity="center"
         android:text="polski złoty" />
-
-    <CheckBox android:id="@+id/star"
-        android:button="@drawable/checkbox_star_selector"
-        android:layout_width="wrap_content"
-        android:layout_weight=".3"
-        android:layout_height="wrap_content"
-        />
-
 
 </LinearLayout>

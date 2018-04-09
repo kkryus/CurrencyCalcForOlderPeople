@@ -20,7 +20,6 @@ public class CurrenciesListAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     private ImageView imageView;
     private TextView shortcutTextView, fullCurrencyTextView;
-    static int position = 0;
 
     public CurrenciesListAdapter(Context context, ArrayList<CurrenciesRowItem> data) {
         ctx = context;
@@ -46,7 +45,6 @@ public class CurrenciesListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, final View convertView, ViewGroup parent) {
-        this.position = position;
         View vi = convertView;
         if (vi == null) {
             vi = inflater.inflate(R.layout.my_alert_dialog, null);
@@ -55,16 +53,6 @@ public class CurrenciesListAdapter extends BaseAdapter {
         imageView = (ImageView) vi.findViewById(R.id.listImageFlag);
         shortcutTextView = (TextView) vi.findViewById(R.id.listShortcutView);
         fullCurrencyTextView = (TextView) vi.findViewById(R.id.listFullNameView);
-        CheckBox star = (CheckBox) vi.findViewById(R.id.star);
-        star.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //Log.e("zdzisiek", buttonView.getParent().getParent() + "");
-                //int position2 = .getPositionForView((View) buttonView.getParent());
-                //Log.v("oko", "ra clicked, row " + position2);
-            }
-        }
-        );
         setHeights();
         setListRow(position);
 
