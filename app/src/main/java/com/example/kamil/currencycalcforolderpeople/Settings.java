@@ -5,5 +5,4 @@ public class Settings {
     public static int numberPrecision = 4;
     public static String language = "pl";
     public static String internetConnection = "wifi";
-    //Log.e("foo", String.format( "Value of a: %.4f", a ));
 }
