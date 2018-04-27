@@ -15,21 +15,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;;
 import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.text.style.RelativeSizeSpan;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 
 import java.util.ArrayList;
 
@@ -38,12 +42,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button firstShortcutButton, secondShortcutButton;
     private EditText inputEditText, outputEditText;
     private Button settingsButton, updateButton, customButton;
-    private ImageButton firstFlagButton, secondFlagButton;
+    private ImageView firstFlagButton, secondFlagButton;
     private ImageButton replaceButton, clearButton;
     private Context ctx;
     private boolean didConnect = true, firstTimeInput = true;
     private DrawerLayout navBar;
     private NavigationView navigationView;
+    private boolean which = false;
 
     public ViewPresenter presenter;
 
@@ -77,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setListeners();
         navigationView.bringToFront();
-
         setSettingsHeights();
     }
 
@@ -89,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         firstShortcutButton = (Button) findViewById(R.id.firstShortcutButton);
         secondShortcutButton = (Button) findViewById(R.id.secondShortcutButton);
 
-        firstFlagButton = (ImageButton) findViewById(R.id.firstFlagButton);
-        secondFlagButton = (ImageButton) findViewById(R.id.secondFlagButton);
+        firstFlagButton = (ImageView) findViewById(R.id.firstFlagButton);
+        secondFlagButton = (ImageView) findViewById(R.id.secondFlagButton);
 
         replaceButton = (ImageButton) findViewById(R.id.replaceButton);
         clearButton = (ImageButton) findViewById(R.id.cleanButton);
@@ -101,11 +105,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         settingsButton = (Button) findViewById(R.id.settingsButton);
         updateButton = (Button) findViewById(R.id.updateButton);
         customButton = (Button) findViewById(R.id.customButton);
-
     }
 
     private void setListeners() {
+        firstFlagButton.setOnTouchListener(currencyOnTouchListener);
+        secondFlagButton.setOnTouchListener(currencyOnTouchListener);
+        firstShortcutButton.setOnTouchListener(currencyOnTouchListener);
+        secondShortcutButton.setOnTouchListener(currencyOnTouchListener);
         replaceButton.setOnClickListener(replaceButtonOnClickListener);
+
         inputEditText.addTextChangedListener(inputTextWatcher);
         inputEditText.setOnTouchListener(inputOnTouchListener);
         clearButton.setOnTouchListener(clearButtonOnTouchListener);
@@ -142,6 +150,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         presenter.saveToFile(content);
     }
 
+    View.OnTouchListener currencyOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                if (view.getId() == R.id.firstFlagButton || view.getId() == R.id.firstShortcutButton) {
+                    which = false;
+                } else {
+                    which = true;
+                }
+                Intent intent = new Intent(ctx, CurrenciesActivity.class);
+                startActivityForResult(intent, 0);
+                //startActivity(intent);
+            }
+            return false;
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            String shortcut = data.getStringExtra("shortcut");
+            if (!which) {
+                firstShortcutButton.setText(shortcut);
+                //firstFlagButton
+            } else {
+                secondShortcutButton.setText(shortcut);
+                //secondFlagButton
+            }
+        }
+    }
+
     View.OnClickListener replaceButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -152,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Drawable tmpFlag = firstFlagButton.getDrawable();
             firstFlagButton.setImageDrawable(secondFlagButton.getDrawable());
             secondFlagButton.setImageDrawable(tmpFlag);
+            inputEditText.setText(inputEditText.getText());
         }
     };
 
@@ -173,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     };
 
     TextWatcher inputTextWatcher = new InputTextWatcher(presenter, this);
-
 
     View.OnClickListener settingsButtonOnClickListener = new View.OnClickListener() {
         @Override
@@ -247,6 +286,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             TextView shortcut = (TextView) view.findViewById(R.id.shortcutView);
             firstFlagButton.setImageDrawable(flag.getDrawable());
             firstShortcutButton.setText(shortcut.getText());
+            inputEditText.setText(inputEditText.getText());
         }
     };
 

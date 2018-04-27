@@ -19,4 +19,5 @@
     <string name="information_message">Ta aplikacja została stworzona przez Kamila Kryusa na zajęcia na Politechnice Śląskiej w Gliwicach.</string>
     <string name="justWifi">Tylko wifi</string>
     <string name="all">Wifi i dane komórkowe</string>
+    <string name="allCurrencies">Wybierz walutę</string>
 </resources>
