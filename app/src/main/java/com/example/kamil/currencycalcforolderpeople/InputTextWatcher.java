@@ -48,9 +48,9 @@ public class InputTextWatcher implements TextWatcher {
                 double value = 0;
                 for (int i = 0; i < foo.length(); i++) {
                     JSONObject tmp = foo.getJSONObject(i);
-                    if (tmp.getString("code").equals(firstShortcutButton.getText().toString())) {
+                    if (tmp.getString("code").equals(firstShortcutButton.getText().toString().replaceAll(",","."))) {
                         double id = tmp.getDouble("mid");
-                        value = Double.parseDouble(inputEditText.getText().toString()) * id;
+                        value = Double.parseDouble(inputEditText.getText().toString().replaceAll(",",".")) * id;
 
                         //outputEditText.setText(String.format("%." + Settings.numberPrecision +"f",value));
                         break;
@@ -58,10 +58,10 @@ public class InputTextWatcher implements TextWatcher {
                 }
                 for (int i = 0; i < foo.length(); i++) {
                     JSONObject tmp = foo.getJSONObject(i);
-                    if (tmp.getString("code").equals(secondShortcutButton.getText().toString())) {
+                    if (tmp.getString("code").equals(secondShortcutButton.getText().toString().replaceAll(",","."))) {
                         double id = tmp.getDouble("mid");
                         value = value / id;
-                        outputEditText.setText(String.format("%." + Settings.numberPrecision + "f", value));
+                        outputEditText.setText(String.format("%." + Settings.numberPrecision + "f", value).replaceAll(",","."));
                         break;
                     }
                 }
@@ -70,10 +70,10 @@ public class InputTextWatcher implements TextWatcher {
             if (firstShortcutButton.getText().toString().equals("PLN") && !inputEditText.getText().toString().equals("")) {
                 for (int i = 0; i < foo.length(); i++) {
                     JSONObject tmp = foo.getJSONObject(i);
-                    if (tmp.getString("code").equals(secondShortcutButton.getText().toString())) {
+                    if (tmp.getString("code").equals(secondShortcutButton.getText().toString().replaceAll(",","."))) {
                         double id = tmp.getDouble("mid");
                         double value = Double.parseDouble(inputEditText.getText().toString()) / id;
-                        outputEditText.setText(String.format("%." + Settings.numberPrecision + "f", value));
+                        outputEditText.setText(String.format("%." + Settings.numberPrecision + "f", value).replaceAll(",","."));
                         break;
                     }
                 }

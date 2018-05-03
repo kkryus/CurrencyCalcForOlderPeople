@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         favoriteListView.setAdapter(new FavoriteListAdapter(this, tmp));
 
+        inputEditText.setKeyListener(DigitsKeyListener.getInstance(true,true));
         setListeners();
         navigationView.bringToFront();
         setSettingsHeights();
