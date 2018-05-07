@@ -20,4 +20,6 @@
     <string name="justWifi">Tylko wifi</string>
     <string name="all">Wifi i dane komórkowe</string>
     <string name="allCurrencies">Wybierz walutę</string>
+    <string name="saveButton">Zapisz</string>
+    <string name="cancelButton">Anuluj</string>
 </resources>

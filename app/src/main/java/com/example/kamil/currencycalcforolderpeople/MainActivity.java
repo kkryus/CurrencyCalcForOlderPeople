@@ -277,6 +277,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     View.OnClickListener customButtomOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Intent intent = new Intent(ctx, FavoriteListActivity.class);
+            startActivity(intent);
         }
 
     };

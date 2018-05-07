@@ -20,4 +20,6 @@
     <string name="justWifi">Just wifi</string>
     <string name="all">Wifi and mobile data</string>
     <string name="allCurrencies">Choose currency</string>
+    <string name="saveButton">Save</string>
+    <string name="cancelButton">Cancel</string>
 </resources>
