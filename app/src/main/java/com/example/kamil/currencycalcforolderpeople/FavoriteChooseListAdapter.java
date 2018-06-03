@@ -1,11 +1,13 @@
 package com.example.kamil.currencycalcforolderpeople;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,12 +19,14 @@ public class FavoriteChooseListAdapter extends BaseAdapter {
     private ArrayList<FavoriteChooseRowItem> data;
     private ImageView imageView;
     private TextView shortcutTextView, fullCurrencyTextView;
+    public static boolean[] mCheckedState;
 
     public FavoriteChooseListAdapter(Context context, ArrayList<FavoriteChooseRowItem> data) {
         ctx = context;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.data = data;
+        mCheckedState = new boolean[data.size()];
     }
 
     @Override
@@ -51,6 +55,11 @@ public class FavoriteChooseListAdapter extends BaseAdapter {
         fullCurrencyTextView = (TextView) vi.findViewById(R.id.fullCurrencyView2);
         setHeights();
         setListRow(i);
+        CheckBox result = (CheckBox)vi.findViewById(R.id.checkBox);
+        if (result == null) {
+            result = new CheckBox(ctx);
+        }
+        result.setChecked(mCheckedState[i]);
 
         return vi;
     }

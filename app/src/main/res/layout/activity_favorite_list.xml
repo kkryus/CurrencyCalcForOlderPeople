@@ -11,13 +11,15 @@
         android:id="@+id/favoriteListView"
         android:layout_width="385dp"
         android:layout_height="500dp"
+        android:layout_above="@+id/saveButton"
+        android:layout_alignParentTop="true"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
     <Button
         android:id="@+id/saveButton"
         android:layout_width="190dp"
-        android:layout_height="67dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:text="@string/saveButton"
@@ -27,7 +29,7 @@
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="194dp"
-        android:layout_height="67dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:text="@string/cancelButton"
