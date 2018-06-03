@@ -51,14 +51,14 @@ public class ViewPresenter {
         if (fileHandling == null) {
             fileHandling = new FileHandling(context);
         }
-        fileHandling.saveToFile(content);
+        fileHandling.saveStringToFile(content);
     }
 
     public String readFromFile() {
         if (fileHandling == null) {
             fileHandling = new FileHandling(context);
         }
-        return fileHandling.readFromFile();
+        return fileHandling.readJSONFromFile();
     }
 
     public void changeLanguage() {

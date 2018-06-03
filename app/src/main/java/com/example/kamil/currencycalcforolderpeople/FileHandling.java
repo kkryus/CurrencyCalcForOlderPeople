@@ -16,7 +16,7 @@ public class FileHandling {
         this.context = context;
     }
 
-    public void saveToFile(String content) {
+    public void saveStringToFile(String content) {
         FileOutputStream outputStream;
         try {
             outputStream = context.openFileOutput(context.getString(R.string.currenciesFileName), Context.MODE_PRIVATE);
@@ -26,8 +26,18 @@ public class FileHandling {
             e.printStackTrace();
         }
     }
+    public void saveStringToFile(String content, String fileName) {
+        FileOutputStream outputStream;
+        try {
+            outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            outputStream.write(content.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-    public String readFromFile() {
+    public String readJSONFromFile() {
         try {
             FileInputStream fis = context.openFileInput(context.getString(R.string.currenciesFileName));
             InputStreamReader isr = new InputStreamReader(fis);

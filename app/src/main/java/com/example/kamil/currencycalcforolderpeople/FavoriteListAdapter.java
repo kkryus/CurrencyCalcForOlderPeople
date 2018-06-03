@@ -1,13 +1,16 @@
 package com.example.kamil.currencycalcforolderpeople;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,9 +52,13 @@ class FavoriteListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
+
         if (vi == null) {
             vi = inflater.inflate(R.layout.favorite_row, null);
+
         }
+
+
 
         imageView = (ImageView) vi.findViewById(R.id.imageView);
         shortcutTextView = (TextView) vi.findViewById(R.id.shortcutView);
@@ -59,7 +66,6 @@ class FavoriteListAdapter extends BaseAdapter {
         currencyValueTextVIew = (TextView) vi.findViewById(R.id.currencyValueView);
         setHeights();
         setListRow(position);
-
         return vi;
     }
 
