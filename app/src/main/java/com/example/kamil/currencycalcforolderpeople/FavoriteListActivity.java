@@ -1,6 +1,7 @@
 package com.example.kamil.currencycalcforolderpeople;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -38,7 +39,15 @@ public class FavoriteListActivity extends AppCompatActivity {
         }
         favoriteListView.setAdapter(new FavoriteChooseListAdapter(this, tmp));
         favoriteListView.setOnItemClickListener(listViewOnItemClickListener);
-        //favoriteListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        favoriteListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+        FileHandling fh = new FileHandling(ctx);
+        String foobar = fh.readFavoritesFromFile();
+        String[] foobar2 = foobar.split(",");
+        for(String item : foobar2)
+        {
+            FavoriteChooseListAdapter.mCheckedState[Integer.parseInt(item)] = true;
+        }
 
         saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(saveButtonOnClickListener);
@@ -52,15 +61,15 @@ public class FavoriteListActivity extends AppCompatActivity {
         public void onClick(View view) {
             String favorites = "";
 
-
             for(int j = 0;j<FavoriteChooseListAdapter.mCheckedState.length;j++)
             {
                 if(FavoriteChooseListAdapter.mCheckedState[j])
                     favorites+=j+",";
             }
-
             FileHandling fh = new FileHandling(ctx);
             fh.saveStringToFile(favorites, "favorites");
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
             finish();
         }
     };
@@ -79,7 +88,6 @@ public class FavoriteListActivity extends AppCompatActivity {
             FavoriteChooseListAdapter.mCheckedState[i] = !FavoriteChooseListAdapter.mCheckedState[i];
             CheckBox chkTxt = (CheckBox) view.findViewById(R.id.checkBox);
             chkTxt.setChecked(FavoriteChooseListAdapter.mCheckedState[i]);
-
         }
     };
 }

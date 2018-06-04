@@ -5,7 +5,10 @@ import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class FileHandling {
@@ -17,14 +20,7 @@ public class FileHandling {
     }
 
     public void saveStringToFile(String content) {
-        FileOutputStream outputStream;
-        try {
-            outputStream = context.openFileOutput(context.getString(R.string.currenciesFileName), Context.MODE_PRIVATE);
-            outputStream.write(content.getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        saveStringToFile(content, "currencies");
     }
     public void saveStringToFile(String content, String fileName) {
         FileOutputStream outputStream;
@@ -36,6 +32,7 @@ public class FileHandling {
             e.printStackTrace();
         }
     }
+
 
     public String readJSONFromFile() {
         try {
@@ -52,6 +49,36 @@ public class FileHandling {
             Log.e("foo", e.getMessage());
         }
         return null;
+    }
+
+    public String readFavoritesFromFile()
+    {
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput("favorites");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
     }
 }
 

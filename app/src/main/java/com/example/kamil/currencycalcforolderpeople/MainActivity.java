@@ -18,6 +18,7 @@ import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,31 +62,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         presenter = new ViewPresenter(this);
         ctx = this;
         loadControls();
-
-
         ArrayList<FavoriteRowItem> tmp = new ArrayList<>();
-        tmp.add(new FavoriteRowItem(R.drawable.flag_euro, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "5000.3746"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "0.3746"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "0.3746"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "0.3746"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
+        AllCurrencies allCurrencies = new AllCurrencies();
+        String yourFilePath = this.getFilesDir() + "/" + "favorites";
 
-        favoriteListView.setAdapter(new FavoriteListAdapter(this, tmp));
+        File file = new File(yourFilePath);
+        if(!file.exists())
+        {
+            try {
+                file.createNewFile();
+                FileHandling fileHandling = new FileHandling(this);
+                fileHandling.saveStringToFile("1,7,13", "favorites");
+
+                tmp.add(new FavoriteRowItem(R.drawable.poland_flag, allCurrencies.getItem(1).getShortcut(),  allCurrencies.getItem(1).getFullCurrency(),  "50"));
+                tmp.add(new FavoriteRowItem(R.drawable.poland_flag, allCurrencies.getItem(7).getShortcut(),  allCurrencies.getItem(7).getFullCurrency(),  "50"));
+                tmp.add(new FavoriteRowItem(R.drawable.poland_flag, allCurrencies.getItem(13).getShortcut(),  allCurrencies.getItem(13).getFullCurrency(),  "50"));
+                favoriteListView.setAdapter(new FavoriteListAdapter(this, tmp));
+            }
+            catch (Exception e)
+            {
+                Log.e("exp", e.getMessage());
+            }
+            // write code for saving data to the file
+        }
+        else
+        {
+            readFavoritesFromFile();
+        }
+
+
 
         inputEditText.setKeyListener(DigitsKeyListener.getInstance(true,true));
         setListeners();
         navigationView.bringToFront();
         setSettingsHeights();
+    }
+
+    public void readFavoritesFromFile()
+    {
+        ArrayList<FavoriteRowItem> tmp = new ArrayList<>();
+        AllCurrencies allCurrencies = new AllCurrencies();
+        FileHandling fh = new FileHandling(ctx);
+        String foobar = fh.readFavoritesFromFile();
+        String[] foobar2 = foobar.split(",");
+        for(String item : foobar2)
+        {
+            tmp.add(new FavoriteRowItem(R.drawable.poland_flag, allCurrencies.getItem(Integer.parseInt(item)).getShortcut(),  allCurrencies.getItem(Integer.parseInt(item)).getFullCurrency(),  "50"));
+        }
+        favoriteListView.setAdapter(new FavoriteListAdapter(this, tmp));
     }
 
     private void loadControls() {
@@ -180,6 +205,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 secondShortcutButton.setText(shortcut);
                 //secondFlagButton
             }
+        }
+        if (requestCode == 1003 && resultCode == Activity.RESULT_OK) {
+            readFavoritesFromFile();
         }
     }
 
@@ -278,7 +306,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(ctx, FavoriteListActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, 1003);
+            //startActivity(intent);
         }
 
     };
