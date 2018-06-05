@@ -52,7 +52,7 @@ public class InputTextWatcher implements TextWatcher {
                         double id = tmp.getDouble("mid");
                         value = Double.parseDouble(inputEditText.getText().toString().replaceAll(",",".")) * id;
 
-                        //outputEditText.setText(String.format("%." + Settings.numberPrecision +"f",value));
+                        outputEditText.setText(String.format("%." + Settings.numberPrecision +"f",value));
                         break;
                     }
                 }

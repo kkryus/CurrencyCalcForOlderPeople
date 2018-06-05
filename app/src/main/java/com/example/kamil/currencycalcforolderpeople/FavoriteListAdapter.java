@@ -58,8 +58,6 @@ class FavoriteListAdapter extends BaseAdapter {
 
         }
 
-
-
         imageView = (ImageView) vi.findViewById(R.id.imageView);
         shortcutTextView = (TextView) vi.findViewById(R.id.shortcutView);
         fullCurrencyTextView = (TextView) vi.findViewById(R.id.fullCurrencyView);
