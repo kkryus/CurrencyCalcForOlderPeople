@@ -75,7 +75,7 @@
                     android:layout_alignStart="@+id/calculatorWrappingBorder"
                     android:layout_marginBottom="12dp"
                     android:layout_marginStart="12dp"
-                    app:srcCompat="@drawable/poland_flag" />
+                    app:srcCompat="@drawable/flag_pln" />
 
                 <Button
                     android:id="@+id/firstShortcutButton"
@@ -86,7 +86,7 @@
                     android:layout_toEndOf="@+id/firstFlagButton"
                     android:textSize="20sp"
                     android:background="@android:color/transparent"
-                    android:text="USD" />
+                    android:text="PLN" />
 
                 <Button
                     android:id="@+id/secondShortcutButton"
@@ -106,7 +106,7 @@
                     android:layout_alignEnd="@+id/calculatorWrappingBorder"
                     android:layout_alignTop="@+id/firstFlagButton"
                     android:layout_marginEnd="14dp"
-                    app:srcCompat="@drawable/flag_euro" />
+                    app:srcCompat="@drawable/flag_eur" />
 
                 <ImageButton
                     android:id="@+id/replaceButton"
@@ -216,7 +216,7 @@
                     android:layout_toEndOf="@+id/updateButton"
                     android:textSize="18sp"
                     android:background="@drawable/left_button_border"
-                    android:text="@string/customButtonText" />
+                    android:text="@string/favButtonText" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -224,7 +224,7 @@
         <ListView
             android:id="@+id/favoriteListView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
     </LinearLayout>

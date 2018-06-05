@@ -11,7 +11,6 @@
         android:id="@+id/favoriteListView"
         android:layout_width="385dp"
         android:layout_height="500dp"
-        android:layout_above="@+id/saveButton"
         android:layout_alignParentTop="true"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
@@ -19,9 +18,10 @@
     <Button
         android:id="@+id/saveButton"
         android:layout_width="190dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/cancelButton"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/favoriteListView"
         android:text="@string/saveButton"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="501dp" />
@@ -32,6 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_below="@+id/favoriteListView"
         android:text="@string/cancelButton"
         tools:layout_editor_absoluteX="189dp"
         tools:layout_editor_absoluteY="501dp" />

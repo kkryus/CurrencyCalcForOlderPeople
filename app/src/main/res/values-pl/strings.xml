@@ -2,7 +2,7 @@
     <string name="app_name">CurrencyCalcForOlderPeople</string>
     <string name="updateButtonText">Aktualizuj</string>
     <string name="settingsButtonText">Ustawienia</string>
-    <string name="customButtonText">Własne</string>
+    <string name="favButtonText">Ulubione</string>
     <string name="urlLink">http://api.nbp.pl/api/exchangerates/tables/A?format=json</string>
     <string name="currenciesFileName">currencies</string>
     <string name="connectionTitle">Błąd połączenia</string>

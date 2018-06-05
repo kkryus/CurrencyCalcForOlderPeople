@@ -12,41 +12,40 @@ public class AllCurrencies {
 
     private ArrayList<CurrenciesRowItem> createList() {
         ArrayList<CurrenciesRowItem> foobar = new ArrayList<CurrenciesRowItem>();
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "THB", "bat (Tajlandia)"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "USD", "dolar amerykański"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "AUD", "dolar australijski"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "HKD", "dolar Hongkongu"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "CAD", "dolar kanadyjski"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "NZD", "dolar nowozelandzki"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "SGD", "dolar singapurski"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "EUR", "euro"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "HUF", "forint (Węgry)"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "CHF", "frank szwajcarski"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "GBP", "funt szterling"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "UAH", "hrywna (Ukraina)"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "JPY", "jen (Japonia)"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "CZK", "korona czeska"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "DKK", "korona duńska"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "ISK", "korona islandzka"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "NOK", "korona norweska"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "SEK", "korona szwedzka"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "HRK", "kuna (Chorwacja)"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "RON", "lej rumuński"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "BGN", "lew (Bułgaria)"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "TRY", "lira turecka"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "ILS", "nowy izraelski szekel"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "CLP", "peso chilijskie"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "PHP", "peso filipińskie"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "MXN", "peso meksykańskie"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "ZAR", "rand (RPA)"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "BRL", "real (Brazylia)"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "MYR", "ringgit (Malezja)"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "RUB", "rubel rosyjski"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "IDR", "rupia indonezyjska"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "INR", "rupia indyjska"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "KRW", "won południowokoreański"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "CNY", "yuan renminbi (Chiny)"));
-        foobar.add(new CurrenciesRowItem(R.drawable.poland_flag, "XDR", "SDR (MFW)"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_bat, "THB", "bat (Tajlandia)"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_usd, "USD", "dolar amerykański"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_aud, "AUD", "dolar australijski"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_hkd, "HKD", "dolar Hongkongu"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_cad, "CAD", "dolar kanadyjski"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_nzd, "NZD", "dolar nowozelandzki"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_sgd, "SGD", "dolar singapurski"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_eur, "EUR", "euro"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_huf, "HUF", "forint (Węgry)"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_chf, "CHF", "frank szwajcarski"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_gbp, "GBP", "funt szterling"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_uah, "UAH", "hrywna (Ukraina)"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_jpy, "JPY", "jen (Japonia)"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_czk, "CZK", "korona czeska"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_dkk, "DKK", "korona duńska"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_isk, "ISK", "korona islandzka"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_nok, "NOK", "korona norweska"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_sek, "SEK", "korona szwedzka"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_hrk, "HRK", "kuna (Chorwacja)"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_ron, "RON", "lej rumuński"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_bgn, "BGN", "lew (Bułgaria)"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_try, "TRY", "lira turecka"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_ils, "ILS", "nowy izraelski szekel"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_clp, "CLP", "peso chilijskie"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_php, "PHP", "peso filipińskie"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_mxn, "MXN", "peso meksykańskie"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_zar, "ZAR", "rand (RPA)"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_brl, "BRL", "real (Brazylia)"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_myr, "MYR", "ringgit (Malezja)"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_rub, "RUB", "rubel rosyjski"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_idr, "IDR", "rupia indonezyjska"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_inr, "INR", "rupia indyjska"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_krw, "KRW", "won południowokoreański"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_hkd, "CNY", "yuan renminbi (Chiny)"));
 
         return foobar;
     }
@@ -59,6 +58,20 @@ public class AllCurrencies {
         if (list == null)
             list = createList();
         return list.get(index);
+    }
+
+    public CurrenciesRowItem getItem(String shortcut)
+    {
+        if (list == null)
+        {
+            list = createList();
+        }
+        for(CurrenciesRowItem item : list)
+        {
+            if(item.getShortcut() == shortcut)
+                return item;
+        }
+        return null;
     }
 
 }

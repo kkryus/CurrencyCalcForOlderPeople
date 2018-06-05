@@ -18,6 +18,7 @@ import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,6 +37,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,31 +65,56 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         presenter = new ViewPresenter(this);
         ctx = this;
         loadControls();
-
-
         ArrayList<FavoriteRowItem> tmp = new ArrayList<>();
-        tmp.add(new FavoriteRowItem(R.drawable.flag_euro, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "5000.3746"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "0.3746"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "0.3746"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "0.3746"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
-        tmp.add(new FavoriteRowItem(R.drawable.poland_flag, "PLN", "polski złoty", "1"));
+        AllCurrencies allCurrencies = new AllCurrencies();
+        String yourFilePath = this.getFilesDir() + "/" + "favorites";
 
-        favoriteListView.setAdapter(new FavoriteListAdapter(this, tmp));
+        File file = new File(yourFilePath);
+        if(!file.exists())
+        {
+            try {
+                file.createNewFile();
+                FileHandling fileHandling = new FileHandling(this);
+                fileHandling.saveStringToFile("1,7,13", "favorites");
+            }
+            catch (Exception e)
+            {
+                Log.e("exp", e.getMessage());
+            }
+        }
+        readFavoritesFromFile();
 
         inputEditText.setKeyListener(DigitsKeyListener.getInstance(true,true));
         setListeners();
         navigationView.bringToFront();
         setSettingsHeights();
+        inputEditText.setText(inputEditText.getText());
+    }
+
+    public void readFavoritesFromFile()
+    {
+        ArrayList<FavoriteRowItem> tmp = new ArrayList<>();
+        AllCurrencies allCurrencies = new AllCurrencies();
+        FileHandling fh = new FileHandling(ctx);
+        String foobar = fh.readFavoritesFromFile();
+        String[] foobar2 = foobar.split(",");
+        int i = 0;
+        for(String item : foobar2)
+        {
+            try {
+                String json = presenter.readFromFile();
+                JSONArray foo = JSONHandling.getRates(json);
+                JSONObject tmp2 = foo.getJSONObject(i);
+                double id = tmp2.getDouble("mid");
+                tmp.add(new FavoriteRowItem(allCurrencies.getItem(Integer.parseInt(item)).getImageDrawable(), allCurrencies.getItem(Integer.parseInt(item)).getShortcut(), allCurrencies.getItem(Integer.parseInt(item)).getFullCurrency(), String.valueOf(id)));
+                i++;
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+        favoriteListView.setAdapter(new FavoriteListAdapter(this, tmp));
     }
 
     private void loadControls() {
@@ -163,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 Intent intent = new Intent(ctx, CurrenciesActivity.class);
                 startActivityForResult(intent, 0);
-                //startActivity(intent);
             }
             return false;
         }
@@ -173,13 +202,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
             String shortcut = data.getStringExtra("shortcut");
+            AllCurrencies allCurrencies = new AllCurrencies();
             if (!which) {
                 firstShortcutButton.setText(shortcut);
-                //firstFlagButton
+
+                int id = getResources().getIdentifier("flag_" + shortcut.toLowerCase(), "drawable", getPackageName());
+                Drawable drawable = getResources().getDrawable(id);
+                firstFlagButton.setImageDrawable(drawable);
+                inputEditText.setText(inputEditText.getText());
             } else {
                 secondShortcutButton.setText(shortcut);
-                //secondFlagButton
+                int id = getResources().getIdentifier("flag_" + shortcut.toLowerCase(), "drawable", getPackageName());
+                Drawable drawable = getResources().getDrawable(id);
+                secondFlagButton.setImageDrawable(drawable);
+                inputEditText.setText(inputEditText.getText());
             }
+        }
+        if (requestCode == 1003 && resultCode == Activity.RESULT_OK) {
+            readFavoritesFromFile();
         }
     }
 
@@ -193,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Drawable tmpFlag = firstFlagButton.getDrawable();
             firstFlagButton.setImageDrawable(secondFlagButton.getDrawable());
             secondFlagButton.setImageDrawable(tmpFlag);
+            inputEditText.setText(inputEditText.getText());
             inputEditText.setText(inputEditText.getText());
         }
     };
@@ -278,7 +319,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(ctx, FavoriteListActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, 1003);
+            //startActivity(intent);
         }
 
     };
