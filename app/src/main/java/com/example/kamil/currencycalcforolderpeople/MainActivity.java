@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView firstFlagButton, secondFlagButton;
     private ImageButton replaceButton, clearButton;
     private Context ctx;
-    private boolean didConnect = true, firstTimeInput = true;
+    private boolean didConnect = true;
     private DrawerLayout navBar;
     private NavigationView navigationView;
     private boolean which = false;
@@ -64,53 +64,100 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         presenter = new ViewPresenter(this);
         ctx = this;
+        
+        String currenciesFilePath = this.getFilesDir() + "/" + "currencies";
+
+        File fileCurrencies = new File(currenciesFilePath);
+        if (!fileCurrencies.exists()) {
+            try {
+                fileCurrencies.createNewFile();
+                saveToFile("[{\"table\":\"A\",\"no\":\"109/A/NBP/2018\",\"effectiveDate\":\"2018-06-07\",\"rates\":\n" +
+                        "[{\"currency\":\"bat (Tajlandia)\",\"code\":\"THB\",\"mid\":0.1129},\n" +
+                        "{\"currency\":\"dolar amerykański\",\"code\":\"USD\",\"mid\":3.6062},\n" +
+                        "{\"currency\":\"dolar australijski\",\"code\":\"AUD\",\"mid\":2.7592},\n" +
+                        "{\"currency\":\"dolar Hongkongu\",\"code\":\"HKD\",\"mid\":0.4597},\n" +
+                        "{\"currency\":\"dolar kanadyjski\",\"code\":\"CAD\",\"mid\":2.7828},\n" +
+                        "{\"currency\":\"dolar nowozelandzki\",\"code\":\"NZD\",\"mid\":2.5414},\n" +
+                        "{\"currency\":\"dolar singapurski\",\"code\":\"SGD\",\"mid\":2.7080},\n" +
+                        "{\"currency\":\"euro\",\"code\":\"EUR\",\"mid\":4.1634},\n" +
+                        "{\"currency\":\"forint (Węgry)\",\"code\":\"HUF\",\"mid\":0.013437},\n" +
+                        "{\"currency\":\"frank szwajcarski\",\"code\":\"CHF\",\"mid\":3.6717},\n" +
+                        "{\"currency\":\"funt szterling\",\"code\":\"GBP\",\"mid\":4.8542},\n" +
+                        "{\"currency\":\"hrywna (Ukraina)\",\"code\":\"UAH\",\"mid\":0.1378},\n" +
+                        "{\"currency\":\"jen (Japonia)\",\"code\":\"JPY\",\"mid\":0.032803},\n" +
+                        "{\"currency\":\"korona czeska\",\"code\":\"CZK\",\"mid\":0.1663},\n" +
+                        "{\"currency\":\"korona duńska\",\"code\":\"DKK\",\"mid\":0.5725},\n" +
+                        "{\"currency\":\"korona islandzka\",\"code\":\"ISK\",\"mid\":0.034355},\n" +
+                        "{\"currency\":\"korona norweska\",\"code\":\"NOK\",\"mid\":0.4490},\n" +
+                        "{\"currency\":\"korona szwedzka\",\"code\":\"SEK\",\"mid\":0.4163},\n" +
+                        "{\"currency\":\"kuna (Chorwacja)\",\"code\":\"HRK\",\"mid\":0.5773},\n" +
+                        "{\"currency\":\"lej rumuński\",\"code\":\"RON\",\"mid\":0.9155},\n" +
+                        "{\"currency\":\"lew (Bułgaria)\",\"code\":\"BGN\",\"mid\":2.1798},\n" +
+                        "{\"currency\":\"lira turecka\",\"code\":\"TRY\",\"mid\":0.7888}," +
+                        "{\"currency\":\"nowy izraelski szekel\",\"code\":\"ILS\",\"mid\":1.0090}," +
+                        "{\"currency\":\"peso chilijskie\",\"code\":\"CLP\",\"mid\":0.005744}," +
+                        "{\"currency\":\"peso meksykańskie\",\"code\":\"MXN\",\"mid\":0.1769}," +
+                        "{\"currency\":\"piso filipińskie\",\"code\":\"PHP\",\"mid\":0.0687}," +
+                        "{\"currency\":\"rand (Republika Południowej Afryki)\",\"code\":\"ZAR\",\"mid\":0.2834}," +
+                        "{\"currency\":\"real (Brazylia)\",\"code\":\"BRL\",\"mid\":0.9374}," +
+                        "{\"currency\":\"ringgit (Malezja)\",\"code\":\"MYR\",\"mid\":0.9071}," +
+                        "{\"currency\":\"rubel rosyjski\",\"code\":\"RUB\",\"mid\":0.0582}," +
+                        "{\"currency\":\"rupia indonezyjska\",\"code\":\"IDR\",\"mid\":0.00026}," +
+                        "{\"currency\":\"rupia indyjska\",\"code\":\"INR\",\"mid\":0.053797}," +
+                        "{\"currency\":\"won południowokoreański\",\"code\":\"KRW\",\"mid\":0.003372}," +
+                        "{\"currency\":\"yuan renminbi (Chiny)\",\"code\":\"CNY\",\"mid\":0.5640}," +
+                        "{\"currency\":\"SDR (MFW)\",\"code\":\"XDR\",\"mid\":5.1467}]}]");
+            } catch (Exception e) {
+                Log.e("exp", e.getMessage());
+            }
+        }
+
+
+
+
         loadControls();
         ArrayList<FavoriteRowItem> tmp = new ArrayList<>();
         AllCurrencies allCurrencies = new AllCurrencies();
-        String yourFilePath = this.getFilesDir() + "/" + "favorites";
+        String favPath = this.getFilesDir() + "/" + "favorites";
 
-        File file = new File(yourFilePath);
-        if(!file.exists())
-        {
+        File fileFav = new File(favPath);
+        if (!fileFav.exists()) {
             try {
-                file.createNewFile();
+                fileFav.createNewFile();
                 FileHandling fileHandling = new FileHandling(this);
-                fileHandling.saveStringToFile("1,7,13", "favorites");
-            }
-            catch (Exception e)
-            {
+                fileHandling.saveStringToFile("0,2,8,14", "favorites");
+            } catch (Exception e) {
                 Log.e("exp", e.getMessage());
             }
         }
         readFavoritesFromFile();
 
-        inputEditText.setKeyListener(DigitsKeyListener.getInstance(true,true));
+        inputEditText.setKeyListener(DigitsKeyListener.getInstance(true, true));
         setListeners();
         navigationView.bringToFront();
         setSettingsHeights();
         inputEditText.setText(inputEditText.getText());
     }
 
-    public void readFavoritesFromFile()
-    {
+    public void readFavoritesFromFile() {
         ArrayList<FavoriteRowItem> tmp = new ArrayList<>();
         AllCurrencies allCurrencies = new AllCurrencies();
         FileHandling fh = new FileHandling(ctx);
         String foobar = fh.readFavoritesFromFile();
         String[] foobar2 = foobar.split(",");
-        int i = 0;
-        for(String item : foobar2)
-        {
+        for (String item : foobar2) {
             try {
-                String json = presenter.readFromFile();
-                JSONArray foo = JSONHandling.getRates(json);
-                JSONObject tmp2 = foo.getJSONObject(i);
-                double id = tmp2.getDouble("mid");
-                tmp.add(new FavoriteRowItem(allCurrencies.getItem(Integer.parseInt(item)).getImageDrawable(), allCurrencies.getItem(Integer.parseInt(item)).getShortcut(), allCurrencies.getItem(Integer.parseInt(item)).getFullCurrency(), String.valueOf(id)));
-                i++;
-            }
-            catch (Exception e)
-            {
+                CurrenciesRowItem favoriteRow = allCurrencies.getItem(Integer.parseInt(item));
+                if (favoriteRow.getShortcut() == "PLN") {
+                    tmp.add(new FavoriteRowItem(favoriteRow.getImageDrawable(), favoriteRow.getShortcut(), favoriteRow.getFullCurrency(), "1"));
+                } else {
+                    String json = presenter.readFromFile();
+                    JSONArray foo = JSONHandling.getRates(json);
+                    JSONObject tmp2 = foo.getJSONObject(allCurrencies.getIndex(favoriteRow.getShortcut()) - 1);
+                    double id = tmp2.getDouble("mid");
+                    tmp.add(new FavoriteRowItem(favoriteRow.getImageDrawable(), favoriteRow.getShortcut(), favoriteRow.getFullCurrency(), String.valueOf(id)));
+                }
+            } catch (Exception e) {
 
             }
         }
@@ -167,10 +214,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Menu menu = (Menu) navigationView.getMenu();
 
         for (int i = 0; i < menu.size(); i++) {
-            MenuItem item = menu.getItem(i); //here we are getting our menu item.
-            SpannableString s = new SpannableString(item.getTitle()); //get text from our menu item.
-            s.setSpan(new RelativeSizeSpan((float) Defaults.settingsItemMenu), 0, s.length(), 0); //here is where we are actually setting the size with a float (proportion).
-            item.setTitle(s); //Then just set the menu item to our SpannableString.
+            MenuItem item = menu.getItem(i);
+            SpannableString s = new SpannableString(item.getTitle());
+            s.setSpan(new RelativeSizeSpan((float) Defaults.settingsItemMenu), 0, s.length(), 0);
+            item.setTitle(s);
         }
     }
 
@@ -320,7 +367,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onClick(View view) {
             Intent intent = new Intent(ctx, FavoriteListActivity.class);
             startActivityForResult(intent, 1003);
-            //startActivity(intent);
         }
 
     };
