@@ -12,7 +12,8 @@ public class AllCurrencies {
 
     private ArrayList<CurrenciesRowItem> createList() {
         ArrayList<CurrenciesRowItem> foobar = new ArrayList<CurrenciesRowItem>();
-        foobar.add(new CurrenciesRowItem(R.drawable.flag_bat, "THB", "bat (Tajlandia)"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_pln, "PLN", "polski złoty"));
+        foobar.add(new CurrenciesRowItem(R.drawable.flag_thb, "THB", "bat (Tajlandia)"));
         foobar.add(new CurrenciesRowItem(R.drawable.flag_usd, "USD", "dolar amerykański"));
         foobar.add(new CurrenciesRowItem(R.drawable.flag_aud, "AUD", "dolar australijski"));
         foobar.add(new CurrenciesRowItem(R.drawable.flag_hkd, "HKD", "dolar Hongkongu"));
@@ -60,18 +61,27 @@ public class AllCurrencies {
         return list.get(index);
     }
 
-    public CurrenciesRowItem getItem(String shortcut)
-    {
-        if (list == null)
-        {
+    public CurrenciesRowItem getItem(String shortcut) {
+        if (list == null) {
             list = createList();
         }
-        for(CurrenciesRowItem item : list)
-        {
-            if(item.getShortcut() == shortcut)
+        for (CurrenciesRowItem item : list) {
+            if (item.getShortcut() == shortcut)
                 return item;
         }
         return null;
+    }
+
+    public int getIndex(String shortcut) {
+        if (list == null) {
+            createList();
+        }
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getShortcut() == shortcut) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 }

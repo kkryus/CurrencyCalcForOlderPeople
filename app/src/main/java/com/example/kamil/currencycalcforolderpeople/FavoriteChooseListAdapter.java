@@ -78,4 +78,5 @@ public class FavoriteChooseListAdapter extends BaseAdapter {
         shortcutTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp2);
         fullCurrencyTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
     }
+
 }

@@ -68,13 +68,19 @@ public class InputTextWatcher implements TextWatcher {
 
             }
             if (firstShortcutButton.getText().toString().equals("PLN") && !inputEditText.getText().toString().equals("")) {
-                for (int i = 0; i < foo.length(); i++) {
-                    JSONObject tmp = foo.getJSONObject(i);
-                    if (tmp.getString("code").equals(secondShortcutButton.getText().toString().replaceAll(",","."))) {
-                        double id = tmp.getDouble("mid");
-                        double value = Double.parseDouble(inputEditText.getText().toString()) / id;
-                        outputEditText.setText(String.format("%." + Settings.numberPrecision + "f", value).replaceAll(",","."));
-                        break;
+                if(secondShortcutButton.getText().toString().equals("PLN"))
+                {
+                    outputEditText.setText(inputEditText.getText());
+                }
+                else {
+                    for (int i = 0; i < foo.length(); i++) {
+                        JSONObject tmp = foo.getJSONObject(i);
+                        if (tmp.getString("code").equals(secondShortcutButton.getText().toString().replaceAll(",", "."))) {
+                            double id = tmp.getDouble("mid");
+                            double value = Double.parseDouble(inputEditText.getText().toString()) / id;
+                            outputEditText.setText(String.format("%." + Settings.numberPrecision + "f", value).replaceAll(",", "."));
+                            break;
+                        }
                     }
                 }
             }

@@ -43,10 +43,11 @@ public class FavoriteListActivity extends AppCompatActivity {
 
         FileHandling fh = new FileHandling(ctx);
         String foobar = fh.readFavoritesFromFile();
-        String[] foobar2 = foobar.split(",");
-        for(String item : foobar2)
-        {
-            FavoriteChooseListAdapter.mCheckedState[Integer.parseInt(item)] = true;
+        if(foobar != "") {
+            String[] foobar2 = foobar.split(",");
+            for (String item : foobar2) {
+                FavoriteChooseListAdapter.mCheckedState[Integer.parseInt(item)] = true;
+            }
         }
 
         saveButton = (Button) findViewById(R.id.saveButton);
