@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         presenter = new ViewPresenter(this);
         ctx = this;
-        
+
         String currenciesFilePath = this.getFilesDir() + "/" + "currencies";
 
         File fileCurrencies = new File(currenciesFilePath);
